@@ -1,0 +1,101 @@
+請設計一個程式完成以下工作：
+
+1. 請宣告三個字串
+    str1 = "This is a book about programming."
+    str2 = "paper "
+    str3 = "book"
+2. 請找出str3在str1的位置P
+3  請將str1在P之前的文字寫到記憶體
+4. 請接著3將str2寫到記憶體
+5. 請將str1在P之後的文字寫到記憶體
+
+Hint 1：
+       area myprog, data, readonly
+str1 dcb "This is a book about programming",0
+str2 dcb "paper",0
+str3 dcb "book",0
+       area mydata, data, readwrite
+pdata space 50
+記得使用nop使程式碼位置均為4的倍數
+
+Hint 2：子字串搜尋（p在r4）
+
+          adr r1, str1
+          adr r2, str2
+          adr r3, str3
+          mov r4, #0
+          mov r5, #0
+loop3 add r6, r4, r5
+          ldrb r7, [r1, r6]
+          ldrb r8, [r3, r5]
+          cmp r7, r8
+         addeq r5, r5, #1
+         addne r4, r4, r5
+         addne r4, r4, #1
+         movne r5, #0
+         cmp r5, #4
+         beq stop
+         bne loop3
+----------------------------------------------
+area   hw, code, readonly
+        entry
+        export    __main
+__main
+        adr  r1, str1
+        adr  r2, str2
+        adr  r3, str3
+ ldr r9, =pdata
+        mov  r4, #0
+        mov  r5, #0
+
+loop3  add  r6, r4, r5
+ ldrb  r7, [r1, r6]
+        ldrb  r8, [r3, r5]
+        cmp  r7, r8
+        addeq  r5, r5, #1
+        addne  r4, r4, r5
+        addne  r4, r4, #1
+        movne  r5, #0
+        cmp  r5, #4
+        beq  start
+        bne  loop3
+
+start sub  r5, r5, r5
+  sub r6, r6, r6
+  sub r7, r7, r7
+  sub r8, r8, r8
+  sub r7, r4, #1
+
+start1 ldrb r5, [r1, r6]
+  strb r5, [r9, r6]
+  add r6, r6, #1
+  cmp r6, r7
+  ble start1
+
+loop ldrb r5, [r2, r8]
+  strb r5, [r9, r4]
+  add r8, r8, #1
+  add r4, r4, #1
+  cmp r5, #0
+  bne loop
+
+  sub r4, r4, #1
+  mov r10, r4
+  sub r4, r4, #1
+loop2 ldrb r5, [r1, r4]
+  strb r5, [r9, r10]
+  add r4, r4, #1
+  add r10, r10, #1
+  cmp r5, #0
+  bne loop2
+
+stop    b        stop
+        area    myprog, data, readonly
+str1    dcb    "This is a book about programming.", 0
+  nop
+str2    dcb    "paper", 0
+  nop
+str3    dcb    "book", 0
+        area    mydata, data, readwrite
+pdata   space   50   
+        end

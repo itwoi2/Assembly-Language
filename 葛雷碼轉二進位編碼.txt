@@ -1,0 +1,18 @@
+請參考範例檔案Bin2Gray，設計一個程式，將輸入的葛雷碼轉換成二進位編碼。
+Hint ：可使用迴圈來處理各位元（暫存器中最多32個位元）
+
+AREA Prog1,CODE,readonly
+entry
+EXPORT __main
+__main
+mov r0, #0x18 ; r0 = Gray Code
+mov r1, #0 ; r1 = B>B(4) = 0
+mov r2, #0 ; lsl count
+loop eor r1, r0, r1 ; r2 = B(3)
+lsl r0, r0, #1
+add r2, r2, #1
+cmp r2, #8 ; bins number
+lsreq r3, r1, #7 ; r3 = binary
+BNE loop
+stop B stop ;stop program
+end

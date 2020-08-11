@@ -1,0 +1,18 @@
+請設計一個程式：
+
+1.預設兩暫存器值分別為16與32
+2.將兩暫存器值互相交換
+提示：可使用temp 或 加減法 或 xor法
+
+AREA Prog1,CODE,READONLY
+ENTRY
+EXPORT __main
+__main
+
+MOV r0,#0x10 ;
+MOV r1,#0x20 ;
+MOV r2,r1;
+MOV r1,r0;
+MOV r0,r2;
+stop B stop ;
+END

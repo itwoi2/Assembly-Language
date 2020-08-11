@@ -1,0 +1,48 @@
+請設計一個跑馬燈程式：
+
+1. 數字由1遞增到F
+2. 當數字為奇數時，跑馬燈向左移動
+3. 當數字為偶數時，跑馬燈向右移動
+4. 移動到最左邊或最右邊時，數字遞增1
+
+Hint:
+
+        area prog1,code,readonly
+        entry
+        export __main
+__main
+        mov       r0, #0xA         ;symbol
+        mov       r1, #0                ;direction 0:left,1:right
+        mov       r2, #7              ;move 7 times
+        mov       r3, #0           ;count 0~7
+loop  cmp       r1, #0             ;check direction
+        lsleq      r0, r0, #4        ;move left        
+        lsrne      r0, r0, #4        ;move right
+        addal     r3,    r3,    #1         ;count=count+1
+        cmp      r3, r2            ;check count=7
+        addeq    r1, r1, #1        ;change direction
+        andeq    r1, r1, #1        ;filter direction
+        moveq    r3,    #0            ;reset count=0
+        b           loop            ;infinite loop
+        end
+----------------------------------------------------------------
+area prog1,code,readonly
+entry
+export __main
+__main
+mov r0, #0xA ;symbol
+mov r10,#0x1
+mov r1, #0 ;direction 0:left,1:right
+mov r2, #7 ;move 7 times
+mov r3, #0 ;count 0~7
+loop cmp r1, #0 ;check direction
+lsleq r0, r0, #4 ;move left
+lsrne r0, r0, #4 ;move right
+addal r3, r3, #1 ;count=count+1
+cmp r3, r2 ;check count=7
+addeq r1, r1, #1 ;change direction
+andeq r1, r1, #1 ;filter direction
+moveq r3, #0 ;reset count=0
+addeq r10, r10, #1
+b loop ;infinite loop
+end

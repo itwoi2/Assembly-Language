@@ -1,0 +1,65 @@
+請設計一個程式：
+
+1. 在記憶體中放入字串："Department of Computer Science, I-Shou University",0
+2. 請統計在此字串中大小寫字母各出現多少次
+3. 請以讀到結束字元0為終止條件
+
+Hint:
+
+        AREA aul, CODE, READONLY
+        ENTRY
+        EXPORT __main
+__main
+        ADR    r2, string                        ;取得記憶體位置
+        MOV    r1, #11                          ;字串長度
+        MOV    r0, #0        
+loop  LDRB    r3,    [r2],    #1              ;讀去記憶體1byte
+        CMP r3,    #0x00000061            ;a
+        ADDEQ    r0,    r0,    #1
+        CMP r3,    #0x00000065            ;e
+        ADDEQ    r0,    r0,    #1
+        CMP r3,    #0x00000069            ;i
+        ADDEQ    r0,    r0,    #1
+        CMP r3,    #0x0000006F            ;o
+        ADDEQ    r0,    r0,    #1
+        CMP r3,    #0x00000075            ;u
+        ADDEQ    r0,    r0,    #1
+        CMP    r1,    #0
+        SUB    r1,    r1,    #1
+        BGT    loop
+string  DCB "hello world",0
+stop  b     stop
+        END
+
+
+------------------------------------------------------
+
+AREA aul, CODE, READONLY
+ENTRY
+EXPORT __main
+__main
+ADR r0, string
+loop LDRB r1, [r0], #1
+cmp r1, #0x5A ; 0x5A = (Z)
+movle r5, r1 ; r5 < (Z)
+cmp r5, #0x41
+addge r2, r2, #1 ; (A) < r5 < (Z) , r2+1
+mov r5, #0 ; r5 初始化
+
+cmp r1, r1 ;分隔
+
+cmp r1, #0x7A ; 0x7A = (z)
+movle r6, r1 ; r6 < (z)
+cmp r6, #0x61
+addge r3, r3, #1 ; (a) < r6 < (z) , r3+1
+mov r6, #0 ; r6初始化
+
+cmp r1, #0x00
+BNE loop
+
+ 
+
+string DCB "hElLo worLd",0
+
+stop b stop
+END
